@@ -1,0 +1,6 @@
+# Live runtime data written by api.php on the server — don't track it,
+# so deploys never overwrite real scores and local edits stay local.
+data.json
+
+# Node test tooling (if ever installed locally)
+node_modules/

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard · Event Leaderboard</title>
+  <!-- Apply saved theme before paint to avoid a flash of the wrong colors -->
+  <script>
+    (function () {
+      try {
+        var k = 'leaderboardTheme', s = localStorage.getItem(k);
+        var m = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        document.documentElement.setAttribute('data-theme', s || (m ? 'light' : 'dark'));
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-body">
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-mark">⚙️</span>
+        <div>
+          <h1 class="brand-title">Admin Dashboard</h1>
+          <p class="brand-sub">Manage events, teams &amp; scores</p>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <span id="mode-badge" class="mode-badge">…</span>
+        <button id="theme-toggle" class="btn-icon-toggle" type="button" aria-label="Toggle theme">☀️</button>
+        <button id="logout-btn" class="btn btn-ghost" type="button" hidden>🔒 Log out</button>
+        <a class="btn btn-primary" href="index.html">👀 View Leaderboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Login overlay (shown only in live/server mode) -->
+  <div id="login-overlay" class="login-overlay" hidden>
+    <form id="login-form" class="login-card" autocomplete="off">
+      <div class="login-lock">🔐</div>
+      <h2>Admin Login</h2>
+      <p class="login-sub">Enter the admin password to manage scores.</p>
+      <input type="password" id="login-password" placeholder="Password" required />
+      <p id="login-error" class="login-error" hidden>Incorrect password. Try again.</p>
+      <button class="btn btn-primary btn-block" type="submit">Unlock Dashboard</button>
+    </form>
+  </div>
+
+  <main class="container admin-grid">
+    <!-- Left column: controls -->
+    <div class="admin-col">
+      <!-- Event management -->
+      <section class="panel">
+        <h3 class="panel-title">🎯 Event</h3>
+        <div class="field">
+          <label for="admin-event-select">Active event</label>
+          <select id="admin-event-select"></select>
+        </div>
+        <div class="field">
+          <label for="new-event-name">Create a new event</label>
+          <div class="inline-add">
+            <input type="text" id="new-event-name" placeholder="e.g. Design Sprint 2026" />
+            <button id="add-event-btn" class="btn btn-primary" type="button">Add</button>
+          </div>
+        </div>
+        <button id="delete-event-btn" class="btn btn-danger-ghost btn-block" type="button">
+          🗑️ Delete current event
+        </button>
+      </section>
+
+      <!-- Add / edit participant -->
+      <section class="panel">
+        <h3 class="panel-title" id="form-title">Add Participant</h3>
+        <form id="participant-form" autocomplete="off">
+          <input type="hidden" id="participant-id" />
+          <div class="field">
+            <label for="p-name">Team / Participant name *</label>
+            <input type="text" id="p-name" placeholder="e.g. Nova Coders" required />
+          </div>
+          <div class="field">
+            <label for="p-org">College / Organization</label>
+            <input type="text" id="p-org" placeholder="e.g. MIT" />
+          </div>
+          <div class="field">
+            <label for="p-score">Score / Marks *</label>
+            <input type="number" id="p-score" placeholder="0" min="0" step="1" required />
+          </div>
+          <div class="field">
+            <label for="p-image">Logo / Image URL <span class="muted">(optional)</span></label>
+            <input type="url" id="p-image" placeholder="https://…" />
+          </div>
+          <div class="form-actions">
+            <button id="form-submit-btn" class="btn btn-primary" type="submit">Add Participant</button>
+            <button id="form-cancel-btn" class="btn btn-ghost" type="button" hidden>Cancel</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <!-- Right column: participants table -->
+    <div class="admin-col">
+      <section class="panel">
+        <div class="panel-head-row">
+          <h3 class="panel-title">👥 Participants</h3>
+          <span id="participant-count" class="count-badge">0 participants</span>
+        </div>
+
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Organization</th>
+                <th class="col-score">Score</th>
+                <th class="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+          </table>
+          <div id="admin-empty" class="admin-empty" hidden>
+            No participants for this event yet. Add one on the left.
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <button id="reset-scores-btn" class="btn btn-danger-ghost" type="button">
+            ♻️ Reset all scores
+          </button>
+          <span class="footer-note">Rankings recalculate automatically.</span>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

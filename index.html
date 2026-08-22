@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Leaderboard · Live Rankings</title>
+  <!-- Apply saved theme before paint to avoid a flash of the wrong colors -->
+  <script>
+    (function () {
+      try {
+        var k = 'leaderboardTheme', s = localStorage.getItem(k);
+        var m = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        document.documentElement.setAttribute('data-theme', s || (m ? 'light' : 'dark'));
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Decorative background -->
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-mark">🏆</span>
+        <div>
+          <h1 class="brand-title">Event Leaderboard</h1>
+          <p class="brand-sub">Live standings &amp; champions</p>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <div class="event-picker">
+          <label for="event-select">Event</label>
+          <select id="event-select" aria-label="Select event"></select>
+        </div>
+        <button id="theme-toggle" class="btn-icon-toggle" type="button" aria-label="Toggle theme">☀️</button>
+        <a class="btn btn-ghost" href="admin.html">⚙️ Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <span class="hero-eyebrow">Now Showing</span>
+      <h2 class="hero-title">Top Champions — <span id="current-event-title">—</span></h2>
+      <p class="hero-desc">The highest scoring teams, ranked in real time.</p>
+      <div class="hero-status"><span id="live-status" class="live-pill">…</span></div>
+    </section>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="empty-state" hidden>
+      <div class="empty-icon">📭</div>
+      <h3>No participants yet</h3>
+      <p>Head to the <a href="admin.html">Admin Dashboard</a> to add teams and scores.</p>
+    </div>
+
+    <!-- Podium -->
+    <section id="podium" class="podium" aria-label="Top three winners"></section>
+
+    <!-- Full ranking -->
+    <section id="ranking-card" class="ranking-card" hidden>
+      <div class="ranking-header">
+        <h3>🏅 Full Standings</h3>
+        <span class="ranking-hint">Sorted by highest score</span>
+      </div>
+      <div class="table-scroll">
+        <table class="ranking-table">
+          <thead>
+            <tr>
+              <th class="col-rank">Rank</th>
+              <th class="col-name">Team</th>
+              <th class="col-org">Organization</th>
+              <th class="col-score">Score</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built with HTML, CSS &amp; Vanilla JavaScript · Data stored locally in your browser</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
