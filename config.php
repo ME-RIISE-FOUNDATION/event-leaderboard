@@ -8,7 +8,7 @@
    ========================================================================= */
 
 if (!defined('ADMIN_PASSWORD')) {
-  define('ADMIN_PASSWORD', '123456');
+define('ADMIN_PASSWORD', 'YourStrong#Pass2026');
 }
 
 /* Optional: pin allowed origins. Leave empty for same-origin only (default,
